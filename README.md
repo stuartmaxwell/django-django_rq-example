@@ -151,13 +151,16 @@ class ContactFormModelForm(ModelForm):
 
 ```python
 from django.core.mail import send_mail, BadHeaderError
-from djangoq_project.settings import DEFAULT_FROM_EMAIL
+from djangorq_project.settings import DEFAULT_FROM_EMAIL
+from django_rq import job
+
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-def send_email_task(self, to, subject, message):
+@job
+def send_email_task(to, subject, message):
     logger.info(f"from={DEFAULT_FROM_EMAIL}, {to=}, {subject=}, {message=}")
     try:
         logger.info("About to send_mail")
